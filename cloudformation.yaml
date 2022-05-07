@@ -1,0 +1,35 @@
+Parameters:
+
+  Port:
+    Default: 443
+    Type: Number
+
+Resources:
+
+  Service:
+    Type: AWS::AppRunner::Service
+    Properties:
+      ServiceName: orange-crush
+      SourceConfiguration:
+        AuthenticationConfiguration:
+          ConnectionArn: "arn:aws:apprunner:us-west-2:917438155543:connection/github/5f697b51ef6540f5842ffb5323c2226f"
+        AutoDeploymentsEnabled: true
+        CodeRepository:
+          RepositoryUrl: "https://github.com/jodytate/orange-crush"
+          SourceCodeVersion:
+            Type: BRANCH
+            Value: main
+          CodeConfiguration:
+            ConfigurationSource: API
+            CodeConfigurationValues:
+              Runtime: NODEJS_14
+              BuildCommand: "npm install"
+              StartCommand: "node ./bin/www"
+              Port: !Ref Port
+              RuntimeEnvironmentVariables:
+                -
+                  Name: NAME
+                  Value: Jody
+      InstanceConfiguration:
+        Cpu: 1 vCPU
+        Memory: 3 GB
